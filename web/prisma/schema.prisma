@@ -1,0 +1,90 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Contractor {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String   // hashed
+  name      String
+  phone     String?
+  company   String?
+  address   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  workers   Worker[]
+  payments  Payment[]
+  attendance Attendance[]
+}
+
+model Worker {
+  id             String   @id @default(uuid())
+  name           String
+  phone          String
+  wageRate       Decimal  @db.Decimal(10, 2)
+  contractorId   String
+  contractor     Contractor @relation(fields: [contractorId], references: [id])
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  attendance     Attendance[]
+  payments       Payment[]
+
+  @@unique([contractorId, phone])
+}
+
+model Attendance {
+  id           String   @id @default(uuid())
+  workerId     String
+  worker       Worker   @relation(fields: [workerId], references: [id])
+  contractorId String
+  contractor   Contractor @relation(fields: [contractorId], references: [id])
+  date         DateTime @db.Date
+  status       AttendanceStatus
+  hoursWorked  Decimal? @db.Decimal(4, 2)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([workerId, date])
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  HALF_DAY
+}
+
+model Payment {
+  id           String   @id @default(uuid())
+  workerId     String
+  worker       Worker   @relation(fields: [workerId], references: [id])
+  contractorId String
+  contractor   Contractor @relation(fields: [contractorId], references: [id])
+  amount       Decimal  @db.Decimal(10, 2)
+  date         DateTime @default(now())
+  notes        String?
+  status       PaymentStatus @default(COMPLETED)
+  receipt      SMSReceipt?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+model SMSReceipt {
+  id        String   @id @default(uuid())
+  paymentId String   @unique
+  payment   Payment  @relation(fields: [paymentId], references: [id])
+  sentTo    String
+  status    String   // "sent", "failed", "delivered"
+  sid       String?
+  sentAt    DateTime @default(now())
+}
