@@ -21,7 +21,8 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus, Pencil, Trash2, Search } from "lucide-react";
+import { Plus, Pencil, Trash2, Search, Users } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface Worker {
     id: string;
@@ -114,13 +115,30 @@ export default function WorkersPage() {
         w.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    const container = {
+        hidden: { opacity: 0 },
+        show: {
+            opacity: 1,
+            transition: { staggerChildren: 0.05 }
+        }
+    };
+
+    const item = {
+        hidden: { y: 10, opacity: 0 },
+        show: { y: 0, opacity: 1 }
+    };
+
     return (
         <div className="space-y-6">
-            <div className="flex items-center justify-between">
-                <h1 className="text-3xl font-bold tracking-tight">Workers</h1>
+            {/* Header Section */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">Workers</h1>
+                    <p className="text-zinc-500 dark:text-zinc-400">Manage your workforce directory.</p>
+                </div>
                 <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
                     <DialogTrigger asChild>
-                        <Button className="gap-2">
+                        <Button className="gap-2 shadow-lg shadow-primary/20">
                             <Plus size={16} /> Add Worker
                         </Button>
                     </DialogTrigger>
@@ -129,96 +147,124 @@ export default function WorkersPage() {
                             <DialogTitle>Add New Worker</DialogTitle>
                         </DialogHeader>
                         <form onSubmit={handleAddWorker} className="space-y-4">
-                            {error && <div className="text-red-500 text-sm">{error}</div>}
-                            <div className="space-y-2">
-                                <Label htmlFor="name">Name</Label>
-                                <Input
-                                    id="name"
-                                    value={formData.name}
-                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                    required
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="phone">Phone</Label>
-                                <Input
-                                    id="phone"
-                                    value={formData.phone}
-                                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                                    required
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="wage">Daily Wage (₹)</Label>
-                                <Input
-                                    id="wage"
-                                    type="number"
-                                    value={formData.wageRate}
-                                    onChange={(e) => setFormData({ ...formData, wageRate: e.target.value })}
-                                    required
-                                />
+                            {error && <div className="text-red-500 text-sm font-medium bg-red-50 p-2 rounded border border-red-100 dark:bg-red-900/10 dark:border-red-900/20">{error}</div>}
+                            <div className="grid gap-4 py-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="name">Full Name</Label>
+                                    <Input
+                                        id="name"
+                                        placeholder="e.g. Rahul Kumar"
+                                        value={formData.name}
+                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                        required
+                                        className="h-11"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="phone">Phone Number</Label>
+                                    <Input
+                                        id="phone"
+                                        placeholder="e.g. 9876543210"
+                                        value={formData.phone}
+                                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                        required
+                                        className="h-11"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="wage">Daily Wage (₹)</Label>
+                                    <Input
+                                        id="wage"
+                                        type="number"
+                                        placeholder="e.g. 500"
+                                        value={formData.wageRate}
+                                        onChange={(e) => setFormData({ ...formData, wageRate: e.target.value })}
+                                        required
+                                        className="h-11"
+                                    />
+                                </div>
                             </div>
                             <DialogFooter>
-                                <Button type="submit">Save Worker</Button>
+                                <Button type="submit" className="w-full sm:w-auto">Save Worker</Button>
                             </DialogFooter>
                         </form>
                     </DialogContent>
                 </Dialog>
             </div>
 
+            {/* Search and Table */}
             <div className="flex items-center gap-2">
                 <div className="relative flex-1 max-w-sm">
-                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
                     <Input
-                        placeholder="Search workers..."
-                        className="pl-8"
+                        placeholder="Search by name..."
+                        className="pl-9 h-11 bg-white dark:bg-zinc-900"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </div>
             </div>
 
-            <div className="rounded-md border">
+            <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden shadow-sm">
                 <Table>
-                    <TableHeader>
+                    <TableHeader className="bg-zinc-50 dark:bg-zinc-800/50">
                         <TableRow>
-                            <TableHead>Name</TableHead>
-                            <TableHead>Phone</TableHead>
-                            <TableHead>Daily Wage</TableHead>
-                            <TableHead className="text-right">Actions</TableHead>
+                            <TableHead className="font-semibold">Name</TableHead>
+                            <TableHead className="font-semibold">Phone</TableHead>
+                            <TableHead className="font-semibold">Daily Wage</TableHead>
+                            <TableHead className="text-right font-semibold">Actions</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {isLoading ? (
                             <TableRow>
-                                <TableCell colSpan={4} className="text-center h-24">
-                                    Loading...
+                                <TableCell colSpan={4} className="text-center h-32 text-zinc-500">
+                                    <div className="flex justify-center items-center gap-2">
+                                        <div className="h-4 w-4 bg-zinc-900 rounded-full animate-bounce"></div>
+                                        <div className="h-4 w-4 bg-zinc-900 rounded-full animate-bounce delay-100"></div>
+                                        <div className="h-4 w-4 bg-zinc-900 rounded-full animate-bounce delay-200"></div>
+                                    </div>
                                 </TableCell>
                             </TableRow>
                         ) : filteredWorkers.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={4} className="text-center h-24 text-muted-foreground">
-                                    No workers found. Add one to get started.
+                                <TableCell colSpan={4} className="text-center h-48">
+                                    <div className="flex flex-col items-center justify-center text-zinc-500">
+                                        <div className="h-12 w-12 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center mb-3">
+                                            <Users className="h-6 w-6 opacity-20" />
+                                        </div>
+                                        <p className="text-base font-medium text-zinc-900 dark:text-zinc-50">No workers found</p>
+                                        <p className="text-sm">Get started by adding a new worker.</p>
+                                    </div>
                                 </TableCell>
                             </TableRow>
                         ) : (
                             filteredWorkers.map((worker) => (
-                                <TableRow key={worker.id}>
-                                    <TableCell className="font-medium">{worker.name}</TableCell>
-                                    <TableCell>{worker.phone}</TableCell>
-                                    <TableCell>₹{worker.wageRate}</TableCell>
-                                    <TableCell className="text-right flex justify-end gap-2">
-                                        <Button variant="ghost" size="icon">
-                                            <Pencil size={16} />
-                                        </Button>
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            className="text-red-500 hover:text-red-600"
-                                            onClick={() => handleDeleteWorker(worker.id)}
-                                        >
-                                            <Trash2 size={16} />
-                                        </Button>
+                                <TableRow key={worker.id} className="group hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
+                                    <TableCell className="font-medium">
+                                        <div className="flex items-center gap-3">
+                                            <div className="h-8 w-8 rounded-full bg-gradient-to-br from-zinc-100 to-zinc-200 dark:from-zinc-800 dark:to-zinc-700 flex items-center justify-center text-xs font-bold text-zinc-600 dark:text-zinc-300">
+                                                {worker.name.charAt(0)}
+                                            </div>
+                                            {worker.name}
+                                        </div>
+                                    </TableCell>
+                                    <TableCell className="text-zinc-500">{worker.phone}</TableCell>
+                                    <TableCell className="font-medium text-zinc-900 dark:text-zinc-50">₹{worker.wageRate}</TableCell>
+                                    <TableCell className="text-right">
+                                        <div className="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50">
+                                                <Pencil size={14} />
+                                            </Button>
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                className="h-8 w-8 text-zinc-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10"
+                                                onClick={() => handleDeleteWorker(worker.id)}
+                                            >
+                                                <Trash2 size={14} />
+                                            </Button>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ))
