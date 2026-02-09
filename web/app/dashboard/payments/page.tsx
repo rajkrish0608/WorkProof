@@ -28,7 +28,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Plus } from "lucide-react";
+import { Plus, Download } from "lucide-react";
 import { format } from "date-fns";
 
 interface Payment {
@@ -209,6 +209,16 @@ export default function PaymentsPage() {
                                     <TableCell className="font-medium">{payment.worker.name}</TableCell>
                                     <TableCell className="text-green-600 font-bold">₹{payment.amount}</TableCell>
                                     <TableCell>{payment.notes || "-"}</TableCell>
+                                    <TableCell>
+                                        <Button
+                                            variant="ghost"
+                                            size="icon"
+                                            title="Download Receipt"
+                                            onClick={() => window.open(`/api/reports/${payment.id}`, '_blank')}
+                                        >
+                                            <Download className="h-4 w-4 text-zinc-500 hover:text-zinc-900" />
+                                        </Button>
+                                    </TableCell>
                                 </TableRow>
                             ))
                         )}
