@@ -17,12 +17,12 @@ export default function Home() {
             Create verifiable digital payment trails for daily wage workers.
           </div>
           <div className="flex flex-col gap-2 relative">
-            <Link href="/login" passHref legacyBehavior>
-              <Button className="w-full text-lg h-12">Log In</Button>
-            </Link>
-            <Link href="/register" passHref legacyBehavior>
-              <Button variant="outline" className="w-full text-lg h-12">Create Account</Button>
-            </Link>
+            <Button className="w-full text-lg h-12" asChild>
+              <Link href="/login">Log In</Link>
+            </Button>
+            <Button variant="outline" className="w-full text-lg h-12" asChild>
+              <Link href="/register">Create Account</Link>
+            </Button>
           </div>
         </CardContent>
       </Card>
