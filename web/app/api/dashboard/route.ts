@@ -10,7 +10,11 @@ export async function GET(request: Request) {
 
     try {
         const today = new Date()
-        today.setHours(0, 0, 0, 0)
+
+        // Use a wide 24-hour window from "now" to capture any recent activity logged as "today"
+        // This is resilient to timezone shifts for daily wage contexts
+        const startWindow = new Date(today.getTime() - 24 * 60 * 60 * 1000)
+        const endWindow = new Date(today.getTime() + 24 * 60 * 60 * 1000) // Future buffer just in case
 
         const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1)
 
@@ -20,11 +24,14 @@ export async function GET(request: Request) {
                 where: { contractorId: user.id }
             }),
 
-            // 2. Active Today (Present or Half Day)
+            // 2. Active Recently (approx "Today")
             prisma.attendance.count({
                 where: {
                     contractorId: user.id,
-                    date: today,
+                    date: {
+                        gte: startWindow,
+                        lt: endWindow
+                    },
                     status: { in: ['PRESENT', 'HALF_DAY'] }
                 }
             }),
