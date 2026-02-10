@@ -24,10 +24,10 @@ export function Atmosphere() {
             />
 
             {/* 2. RADIAL VIGNETTE (Focus puller) */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent_0%,rgba(0,0,0,0.4)_120%)] mix-blend-multiply dark:mix-blend-background" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,transparent_0%,rgba(0,0,0,0.5)_150%)] mix-blend-multiply dark:mix-blend-darken" />
 
             {/* 3. TOP-DOWN LIGHT LEAK (Divine Light) */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80vw] h-[400px] bg-indigo-500/5 blur-[120px] rounded-full mix-blend-screen pointer-events-none" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80vw] h-[400px] bg-indigo-500/[0.03] blur-[120px] rounded-full mix-blend-screen pointer-events-none dark:bg-indigo-500/[0.02]" />
         </div>
     );
 }
