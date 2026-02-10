@@ -12,6 +12,10 @@
   <img src="docs/preview-dashboard.png" alt="WorkProof Dashboard Preview" width="800" />
 </p>
 
+<p align="center">
+  <a href="https://workproof.vercel.app"><strong>Live Demo →</strong></a>
+</p>
+
 ## Project Overview
 
 WorkProof is a trust-critical B2B SaaS platform engineered for the immutable recording of daily wage work, attendance, and payment verification. Designed for industries where labor transparency is paramount, it serves as a digital ledger that bridges the gap between workforce management and financial compliance. By providing verifiable proof of work and payment, the system reduces disputes, ensures regulatory alignment, and brings institutional-grade accountability to high-frequency labor environments.
