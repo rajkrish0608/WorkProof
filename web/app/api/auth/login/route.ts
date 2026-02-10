@@ -34,9 +34,23 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
         }
 
-        const token = generateToken({ id: user.id, email: user.email })
+        const token = generateToken({
+            id: user.id,
+            email: user.email,
+            role: user.role,
+            orgId: user.managerId || user.id
+        })
 
-        return NextResponse.json({ token, user: { id: user.id, name: user.name, email: user.email } }, { status: 200 })
+        return NextResponse.json({
+            token,
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                orgId: user.managerId || user.id
+            }
+        }, { status: 200 })
 
     } catch (error) {
         console.error('Login error:', error)

@@ -17,7 +17,7 @@ export async function GET(request: Request) {
 
     try {
         const payments = await prisma.payment.findMany({
-            where: { contractorId: user.id },
+            where: { contractorId: user.orgId },
             include: {
                 worker: { select: { name: true, phone: true } }
             },
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
             where: { id: workerId }
         })
 
-        if (!worker || worker.contractorId !== user.id) {
+        if (!worker || worker.contractorId !== user.orgId) {
             return NextResponse.json({ error: 'Worker not found' }, { status: 404 })
         }
 
@@ -61,7 +61,7 @@ export async function POST(request: Request) {
                 amount,
                 notes,
                 workerId,
-                contractorId: user.id,
+                contractorId: user.orgId,
                 status: 'COMPLETED'
             },
             include: {

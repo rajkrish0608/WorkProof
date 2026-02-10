@@ -17,7 +17,7 @@ export async function GET(request: Request) {
 
     try {
         const workers = await prisma.worker.findMany({
-            where: { contractorId: user.id },
+            where: { contractorId: user.orgId },
             orderBy: { name: 'asc' }
         })
         return NextResponse.json(workers)
@@ -45,7 +45,7 @@ export async function POST(request: Request) {
         const existingWorker = await prisma.worker.findUnique({
             where: {
                 contractorId_phone: {
-                    contractorId: user.id,
+                    contractorId: user.orgId,
                     phone: phone
                 }
             }
@@ -60,7 +60,7 @@ export async function POST(request: Request) {
                 name,
                 phone,
                 wageRate,
-                contractorId: user.id
+                contractorId: user.orgId
             }
         })
 

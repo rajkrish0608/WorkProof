@@ -214,7 +214,26 @@ export default function PaymentsPage() {
                                             variant="ghost"
                                             size="icon"
                                             title="Download Receipt"
-                                            onClick={() => window.open(`/api/reports/${payment.id}`, '_blank')}
+                                            onClick={async () => {
+                                                try {
+                                                    const res = await fetch(`/api/reports/${payment.id}`, {
+                                                        headers: { Authorization: `Bearer ${token}` }
+                                                    });
+                                                    if (!res.ok) throw new Error("Failed to download");
+                                                    const blob = await res.blob();
+                                                    const url = window.URL.createObjectURL(blob);
+                                                    const a = document.createElement('a');
+                                                    a.href = url;
+                                                    a.download = `receipt-${payment.id.slice(0, 8)}.pdf`;
+                                                    document.body.appendChild(a);
+                                                    a.click();
+                                                    window.URL.revokeObjectURL(url);
+                                                    document.body.removeChild(a);
+                                                } catch (err) {
+                                                    console.error("Download failed", err);
+                                                    alert("Failed to download receipt");
+                                                }
+                                            }}
                                         >
                                             <Download className="h-4 w-4 text-zinc-500 hover:text-zinc-900" />
                                         </Button>

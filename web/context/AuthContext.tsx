@@ -7,6 +7,8 @@ interface User {
     id: string;
     name: string;
     email: string;
+    role?: 'OWNER' | 'STAFF';
+    orgId?: string;
     company?: string | null;
     phone?: string | null;
 }

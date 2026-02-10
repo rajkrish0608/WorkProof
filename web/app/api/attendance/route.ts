@@ -32,7 +32,7 @@ export async function GET(request: Request) {
 
         const attendance = await prisma.attendance.findMany({
             where: {
-                contractorId: user.id,
+                contractorId: user.orgId,
                 date: targetDate
             },
             include: {
@@ -66,6 +66,19 @@ export async function POST(request: Request) {
         const { date, records } = result.data
         const targetDate = new Date(date)
 
+        // Verify all workers belong to the current contractor
+        const workerIds = records.map(r => r.workerId)
+        const validWorkers = await prisma.worker.count({
+            where: {
+                id: { in: workerIds },
+                contractorId: user.orgId
+            }
+        })
+
+        if (validWorkers !== workerIds.length) {
+            return NextResponse.json({ error: 'One or more workers do not belong to your organization' }, { status: 403 })
+        }
+
         // Use transaction for bulk operations
         await prisma.$transaction(
             records.map(record =>
@@ -82,7 +95,7 @@ export async function POST(request: Request) {
                     },
                     create: {
                         workerId: record.workerId,
-                        contractorId: user.id,
+                        contractorId: user.orgId,
                         date: targetDate,
                         status: record.status,
                         hoursWorked: record.hoursWorked

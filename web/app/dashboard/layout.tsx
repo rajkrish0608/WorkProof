@@ -33,6 +33,10 @@ export default function DashboardLayout({
         { href: "/dashboard/payments", label: "Payments", icon: Receipt },
     ];
 
+    if (user?.role === 'OWNER') {
+        navItems.push({ href: "/dashboard/team", label: "Team", icon: Users }); // Reusing Users icon or find a better one
+    }
+
     const sidebarContent = (
         <div className="flex flex-col h-full bg-zinc-950 text-zinc-50 dark:bg-zinc-950/50 dark:border-r dark:border-zinc-800">
             <div className="flex h-16 items-center px-6 border-b border-zinc-800">
