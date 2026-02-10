@@ -5,6 +5,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { SmoothScroll } from "@/components/ui/smooth-scroll";
 import { Atmosphere } from "@/components/ui/atmosphere";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-serif" });
@@ -32,6 +33,7 @@ export default function RootLayout({
             <Atmosphere />
             <AuthProvider>
               {children}
+              <Analytics />
             </AuthProvider>
           </SmoothScroll>
         </ThemeProvider>
