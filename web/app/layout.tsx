@@ -4,6 +4,7 @@ import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { SmoothScroll } from "@/components/ui/smooth-scroll";
 import { Atmosphere } from "@/components/ui/atmosphere";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-serif" });
@@ -19,14 +20,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${playfair.variable} font-sans antialiased`}>
-        <SmoothScroll>
-          <Atmosphere />
-          <AuthProvider>
-            {children}
-          </AuthProvider>
-        </SmoothScroll>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <SmoothScroll>
+            <Atmosphere />
+            <AuthProvider>
+              {children}
+            </AuthProvider>
+          </SmoothScroll>
+        </ThemeProvider>
       </body>
     </html>
   );
