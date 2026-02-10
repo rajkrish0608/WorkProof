@@ -10,17 +10,17 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { BlueprintIntro } from "@/components/intro-starter";
 
 // --- 3D MONOLITH COMPONENT ---
-function Monolith({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
+function Monolith({ scrollYProgress, phase }: { scrollYProgress: MotionValue<number>, phase?: 1 | 2 | 3 }) {
   // Smooth out the scroll progress
   const smoothProgress = useSpring(scrollYProgress, { mass: 0.1, stiffness: 100, damping: 20 });
 
-  // Transforms for the monolith
+  // Transforms for the monolith - always keep rotation alive
   const rotateY = useTransform(smoothProgress, [0, 1], [0, 360]);
   const rotateX = useTransform(smoothProgress, [0, 0.5, 1], [15, -15, 15]);
   const scale = useTransform(smoothProgress, [0, 0.2, 0.8, 1], [0.8, 1.2, 1.2, 0.8]);
   const y = useTransform(smoothProgress, [0, 1], [0, -50]);
 
-  // Dynamic content based on scroll
+  // Dynamic content based on scroll OR fixed phase
   const opacity1 = useTransform(smoothProgress, [0, 0.25], [1, 0]);
   const opacity2 = useTransform(smoothProgress, [0.25, 0.5, 0.75], [0, 1, 0]);
   const opacity3 = useTransform(smoothProgress, [0.75, 1], [0, 1]);
@@ -35,14 +35,20 @@ function Monolith({ scrollYProgress }: { scrollYProgress: MotionValue<number> })
         <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/10 via-transparent to-emerald-500/10 pointer-events-none" />
 
         {/* Phase 1: Identity (Start) */}
-        <motion.div style={{ opacity: opacity1 }} className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
+        <motion.div
+          style={{ opacity: phase === 1 ? 1 : (phase ? 0 : opacity1) }}
+          className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center"
+        >
           <Fingerprint className="w-24 h-24 text-zinc-800 dark:text-zinc-100 mb-6 stroke-[1.5]" />
           <div className="text-2xl font-serif font-bold text-zinc-900 dark:text-white mb-2">Identity</div>
           <div className="text-xs font-mono text-zinc-500 uppercase tracking-widest">Verified Human</div>
         </motion.div>
 
         {/* Phase 2: Flow (Middle) */}
-        <motion.div style={{ opacity: opacity2 }} className="absolute inset-0 flex flex-col items-center justify-center p-8">
+        <motion.div
+          style={{ opacity: phase === 2 ? 1 : (phase ? 0 : opacity2) }}
+          className="absolute inset-0 flex flex-col items-center justify-center p-8"
+        >
           <div className="space-y-4 w-full">
             {[1, 2, 3, 4].map((i) => (
               <div key={i} className="h-2 w-full bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
@@ -62,7 +68,10 @@ function Monolith({ scrollYProgress }: { scrollYProgress: MotionValue<number> })
         </motion.div>
 
         {/* Phase 3: Truth (End) */}
-        <motion.div style={{ opacity: opacity3 }} className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center">
+        <motion.div
+          style={{ opacity: phase === 3 ? 1 : (phase ? 0 : opacity3) }}
+          className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center"
+        >
           <ShieldCheck className="w-24 h-24 text-emerald-600 dark:text-emerald-400 mb-6 stroke-[1.5]" />
           <div className="text-2xl font-serif font-bold text-zinc-900 dark:text-white mb-2">Truth</div>
           <div className="text-xs font-mono text-zinc-500 uppercase tracking-widest">Immutable Proof</div>
@@ -170,11 +179,8 @@ export default function Home() {
               {/* SECTION 2: IDENTITY */}
               <section className="min-h-screen flex items-center px-6 lg:px-12">
                 <div className="container mx-auto grid lg:grid-cols-2 gap-12 items-center">
-                  <div className="hidden lg:block">
-                    {/* Space reserved for Monolith sticking from previous section if we were doing complex scroll jacking, 
-                              but for now monolith is sticky in the first section. 
-                              Actually, let's make the monolith stick across the whole page using sticky positioning. 
-                          */}
+                  <div className="hidden lg:flex items-center justify-center">
+                    <Monolith scrollYProgress={scrollYProgress} phase={1} />
                   </div>
                   <div className="space-y-12 max-w-lg lg:ml-auto bg-white/50 dark:bg-black/20 backdrop-blur-md p-8 rounded-3xl border border-zinc-200/50 dark:border-white/10">
                     <div className="h-12 w-12 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center border border-zinc-200 dark:border-zinc-700">
@@ -219,7 +225,7 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="hidden lg:flex items-center justify-center">
-                    <Monolith scrollYProgress={scrollYProgress} />
+                    <Monolith scrollYProgress={scrollYProgress} phase={2} />
                   </div>
                 </div>
               </section>
