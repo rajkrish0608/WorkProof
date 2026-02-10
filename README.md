@@ -1,4 +1,16 @@
-# WorkProof
+<h1 align="center">WorkProof</h1>
+
+<p align="center">
+  <strong>Trust-first ledger for workforce verification and payment proof</strong>
+</p>
+
+<p align="center">
+  Immutable records · Banking-grade UI · Optical 3D · Motion discipline
+</p>
+
+<p align="center">
+  <img src="docs/preview-dashboard.png" alt="WorkProof Dashboard Preview" width="800" />
+</p>
 
 ## Project Overview
 
@@ -6,16 +18,31 @@ WorkProof is a trust-critical B2B SaaS platform engineered for the immutable rec
 
 This is a serious system designed for reliability and global scalability.
 
-## Design & Motion Philosophy
+---
+
+
+## Design & Motion DNA
+
+<p align="center">
+  <img src="docs/motion-dna.png" alt="WorkProof Motion & 3D System" width="700" />
+</p>
 
 The WorkProof interface is governed by the "Banking Terminal" standard. It prioritizes clarity and operational efficiency over decorative elements. The visual language is defined by a Zinc-first neutral palette, utilizing Indigo accents exclusively to signal trust, active states, and successful outcomes.
 
-Motion in WorkProof is treated as invisible engineering rather than decoration. Its purpose is strictly functional:
+Motion in WorkProof is treated as **invisible engineering** rather than decoration. Its purpose is strictly functional:
 - **Attention Guidance**: Subtle transitions lead the eye to critical data points.
 - **Cognitive Load Reduction**: Logical entrances explain the relationship between UI elements.
 - **Action Confirmation**: Immediate, understated feedback confirms that the system has processed a request.
 
 We explicitly reject flashy animations, elastic/bounce motion, and high-frequency visual noise. Motion exists to serve the user, not to entertain them.
+
+## Motion Preview (Intentional & Restrained)
+
+<p align="center">
+  <img src="docs/hero-motion.webp" alt="WorkProof Optical 3D Motion Preview" width="700" />
+</p>
+
+Motion in WorkProof exists to guide attention and confirm state — never to distract.
 
 ## 3D & Animation DNA
 
@@ -26,6 +53,14 @@ Depth and spatial hierarchy in WorkProof are achieved through Optical 3D—a tec
 - **Temporal Rhythm**: Ambient motion is kept to an extremely slow frequency (12–18s) to ensure the interface feels alive but never distracting.
 - **Interaction Restraint**: Motion is intentionally minimized within the dashboard to maintain focus during complex data entry or auditing tasks.
 
+## System Architecture (High-Level)
+
+<p align="center">
+  <img src="docs/architecture.png" alt="WorkProof Architecture Diagram" width="700" />
+</p>
+
+WorkProof is designed for predictability, auditability, and long-term maintenance.
+
 ## UI Standards (“Banking Terminal” Rule)
 
 WorkProof dashboards are intentionally calm. We follow a strict 90/10 rule: 90% of the interface remains neutral (Zinc/White/Black) while 10% is reserved for context-critical color. 
@@ -34,16 +69,22 @@ WorkProof dashboards are intentionally calm. We follow a strict 90/10 rule: 90% 
 - **Interaction Decay**: Motion and entrance animations disappear after the first interaction, allowing the professional user to operate in a high-speed, static environment.
 - **Typography**: Focused on legibility and information density, supporting long-duration usage without visual fatigue.
 
-## Technical Architecture Overview
+## Technology Stack
+
+<p align="center">
+  <img src="docs/tech-stack.png" alt="WorkProof Tech Stack" width="600" />
+</p>
+
+- **Frontend:** Next.js (App Router), React, Tailwind CSS  
+- **Motion:** Framer Motion (tokenized system)  
+- **Backend:** Next.js Route Handlers  
+- **Database:** PostgreSQL + Prisma  
+- **Auth:** JWT (stateless)  
+- **Validation:** Zod (runtime schema enforcement)
 
 The architecture is selected for its predictability, scalability, and strict type safety.
 
-- **Next.js (App Router)**: Enables high-performance server-side rendering and predictable routing for complex financial data.
-- **Tailwind CSS**: Provides a deterministic utility-first styling system that ensures design consistency across the platform.
-- **Framer Motion**: Orchestrates the motion system through standardized tokens, ensuring zero deviation from the motion philosophy.
-- **PostgreSQL + Prisma**: Forms a robust relational foundation with type-safe database access and predictable migrations.
-- **JWT Authentication**: Implements stateless, secure identity management suitable for enterprise environments.
-- **Zod Validation**: Ensures strict runtime schema validation for all data entering or leaving the system.
+---
 
 ## Motion Tokens & Interaction Rules
 
@@ -53,6 +94,8 @@ Motion is standardized as a series of system-wide tokens to ensure consistency.
 - **Easing**: We utilize custom bezier curves to mimic natural Newtonian physics, avoiding linear or erratic movement.
 - **Scale Limits**: Hover states are restricted to a 2% scale increase (1.02x) to provide feedback without breaking the visual grid.
 - **Standardized States**: All buttons, inputs, and cards follow a uniform state transition map (Rest -> Hover -> Press -> Success/Error).
+
+---
 
 ## Project Structure
 
