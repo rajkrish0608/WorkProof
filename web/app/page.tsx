@@ -11,6 +11,9 @@ import { BlueprintIntro } from "@/components/intro-starter";
 import { FeaturesSection } from "@/components/landing/features-section";
 import { HowItWorks } from "@/components/landing/how-it-works";
 import { StatsSection } from "@/components/landing/stats-section";
+import { TrustedBySection } from "@/components/landing/trusted-by-section";
+import { TestimonialsSection } from "@/components/landing/testimonials-section";
+import { Footer } from "@/components/landing/footer";
 
 // --- 3D MONOLITH COMPONENT ---
 function Monolith({ scrollYProgress, phase }: { scrollYProgress: MotionValue<number>, phase?: 1 | 2 | 3 }) {
@@ -179,6 +182,12 @@ export default function Home() {
                 </div>
               </section>
 
+              {/* TRUSTED BY */}
+              <TrustedBySection />
+
+              {/* STATS */}
+              <StatsSection />
+
               {/* SECTION 2: IDENTITY */}
               <section className="min-h-screen flex items-center px-6 lg:px-12">
                 <div className="container mx-auto grid lg:grid-cols-2 gap-12 items-center">
@@ -204,6 +213,9 @@ export default function Home() {
                   </div>
                 </div>
               </section>
+
+              {/* FEATURES */}
+              <FeaturesSection />
 
               {/* SECTION 3: THE LEDGER */}
               <section className="min-h-screen flex items-center px-6 lg:px-12">
@@ -233,20 +245,14 @@ export default function Home() {
                 </div>
               </section>
 
+              {/* HOW IT WORKS */}
+              <HowItWorks />
+
+              {/* TESTIMONIALS */}
+              <TestimonialsSection />
+
               {/* FOOTER */}
-              <footer className="py-12 border-t border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
-                <div className="container mx-auto px-6 text-center">
-                  <div className="text-xs font-mono text-zinc-400 uppercase tracking-widest mb-4">WorkProof // Operational Protocol v1.0</div>
-                  <div className="flex items-center justify-center gap-6">
-                    <span className="h-1 w-1 rounded-full bg-zinc-300 dark:bg-zinc-700" />
-                    <span className="text-sm text-zinc-500">Secure</span>
-                    <span className="h-1 w-1 rounded-full bg-zinc-300 dark:bg-zinc-700" />
-                    <span className="text-sm text-zinc-500">Private</span>
-                    <span className="h-1 w-1 rounded-full bg-zinc-300 dark:bg-zinc-700" />
-                    <span className="text-sm text-zinc-500">Encrypted</span>
-                  </div>
-                </div>
-              </footer>
+              <Footer />
 
             </main>
           </motion.div>
