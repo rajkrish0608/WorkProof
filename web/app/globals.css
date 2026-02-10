@@ -50,20 +50,21 @@
 
   .dark {
     /* Zinc-950 base */
-    --background: 240 10% 3.9%;
+    --background: 0 0% 0%;
     /* Zinc-50 text */
     --foreground: 0 0% 98%;
 
     /* Zinc-900 cards */
-    --card: 240 10% 3.9%;
+    --card: 0 0% 0%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 240 10% 3.9%;
+    --popover: 0 0% 0%;
     --popover-foreground: 0 0% 98%;
 
     /* White Primary -> Indigo-400 (Softer for Dark Mode) */
-    --primary: 226 96% 78%;
-    --primary-foreground: 226 58% 15%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    /* (Softer for Dark Mode) */
 
     /* Zinc-800 Secondary */
     --secondary: 240 3.7% 15.9%;

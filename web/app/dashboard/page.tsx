@@ -7,6 +7,7 @@ import { Users, UserCheck, IndianRupee, Activity, ArrowUpRight, Clock, Plus, Cal
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { SplineScene } from "@/components/ui/spline-scene";
 
 export default function DashboardPage() {
     const { token, user } = useAuth();
@@ -52,11 +53,23 @@ export default function DashboardPage() {
             initial="hidden"
             animate="show"
         >
-            {/* Header Area */}
-            <motion.div variants={item} className="flex items-end justify-between border-b border-zinc-200 dark:border-zinc-800 pb-6">
-                <div>
-                    <h1 className="text-4xl font-serif font-bold text-zinc-900 dark:text-zinc-50">Overview</h1>
-                    <p className="text-zinc-500 dark:text-zinc-400 mt-2">Welcome back, {user?.name}</p>
+            {/* Header Area with 3D Integration */}
+            <motion.div variants={item} className="flex flex-col md:flex-row items-end justify-between border-b border-zinc-200 dark:border-zinc-800 pb-6 gap-4">
+                <div className="relative">
+                    <h1 className="text-4xl font-serif font-bold text-zinc-900 dark:text-zinc-50 relative z-10">Overview</h1>
+                    <p className="text-zinc-500 dark:text-zinc-400 mt-2 relative z-10">Welcome back, {user?.name}</p>
+
+                    {/* Subtle 3D Element behind/next to text */}
+                    <div className="absolute -top-20 -left-20 w-64 h-64 opacity-50 pointer-events-none -z-0 hidden md:block">
+                        {/* We use a lightweight splinetool scene or a CSS 3D element here to not overload behavior. 
+                            If we want full spline, we can use the component. 
+                            Let's use a small spline scene here.
+                        */}
+                        <SplineScene
+                            scene="https://prod.spline.design/6Wq1Q7YGyM-iab9i/scene.splinecode"
+                            className="w-full h-full"
+                        />
+                    </div>
                 </div>
                 <div className="hidden md:block text-right">
                     <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div>

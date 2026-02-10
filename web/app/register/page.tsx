@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { SplineScene } from "@/components/ui/spline-scene";
 
 export default function RegisterPage() {
     const { login } = useAuth();
@@ -48,15 +49,22 @@ export default function RegisterPage() {
     };
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-zinc-50 p-4 dark:bg-zinc-950">
-            <Card className="w-full max-w-md">
-                <CardHeader>
-                    <CardTitle className="text-2xl">Create Account</CardTitle>
-                    <CardDescription>Enter your details to create a new account</CardDescription>
-                </CardHeader>
-                <form onSubmit={handleSubmit}>
-                    <CardContent className="space-y-4">
-                        {error && <div className="text-sm text-red-500 font-medium">{error}</div>}
+        <div className="flex min-h-screen bg-zinc-50 dark:bg-black">
+            {/* Left: Form */}
+            <div className="w-full lg:w-1/2 flex flex-col justify-center p-8 lg:p-24 overflow-y-auto">
+                <div className="max-w-md mx-auto w-full">
+                    <Link href="/" className="flex items-center gap-2 mb-8 text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors group">
+                        <span className="group-hover:-translate-x-1 transition-transform">←</span> Back to Home
+                    </Link>
+
+                    <div className="mb-10">
+                        <h1 className="text-4xl font-serif font-bold text-zinc-900 dark:text-white mb-3">Create Account</h1>
+                        <p className="text-zinc-500 dark:text-zinc-400">Enter your details to generate your operational identity.</p>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        {error && <div className="p-3 rounded-lg bg-red-50 dark:bg-red-900/10 text-red-600 dark:text-red-400 text-sm font-medium">{error}</div>}
+
                         <div className="space-y-2">
                             <Label htmlFor="name">Full Name</Label>
                             <Input
@@ -65,6 +73,7 @@ export default function RegisterPage() {
                                 value={formData.name}
                                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                 required
+                                className="h-12 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus:ring-indigo-500"
                             />
                         </div>
                         <div className="space-y-2">
@@ -76,6 +85,7 @@ export default function RegisterPage() {
                                 value={formData.email}
                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                 required
+                                className="h-12 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus:ring-indigo-500"
                             />
                         </div>
                         <div className="space-y-2">
@@ -86,6 +96,7 @@ export default function RegisterPage() {
                                 value={formData.phone}
                                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                 required
+                                className="h-12 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus:ring-indigo-500"
                             />
                         </div>
                         <div className="space-y-2">
@@ -96,22 +107,35 @@ export default function RegisterPage() {
                                 value={formData.password}
                                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                 required
+                                className="h-12 bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 focus:ring-indigo-500"
                             />
                         </div>
-                    </CardContent>
-                    <CardFooter className="flex flex-col gap-4">
-                        <Button className="w-full" type="submit" disabled={loading}>
+
+                        <Button className="w-full h-12 text-base rounded-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-500/20" type="submit" disabled={loading}>
                             {loading ? "Creating account..." : "Create Account"}
                         </Button>
-                        <div className="text-center text-sm text-muted-foreground">
+
+                        <div className="text-center text-sm text-zinc-500">
                             Already have an account?{" "}
-                            <Link href="/login" className="text-primary hover:underline">
+                            <Link href="/login" className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 hover:underline">
                                 Log in
                             </Link>
                         </div>
-                    </CardFooter>
-                </form>
-            </Card>
+                    </form>
+                </div>
+            </div>
+
+            {/* Right: 3D Scene */}
+            <div className="hidden lg:block w-1/2 relative bg-zinc-100 dark:bg-zinc-900 overflow-hidden border-l border-zinc-200 dark:border-zinc-800">
+                <SplineScene
+                    scene="https://prod.spline.design/6Wq1Q7YGyM-iab9i/scene.splinecode"
+                    className="absolute inset-0 w-full h-full"
+                />
+                <div className="absolute bottom-12 left-12 right-12 z-10 pointer-events-none">
+                    <h2 className="text-3xl font-bold text-zinc-900 dark:text-white mb-2">Secure by Design.</h2>
+                    <p className="text-zinc-600 dark:text-zinc-400 max-w-md text-lg">Your data is encrypted, sharded, and replicated across our decentralized grid.</p>
+                </div>
+            </div>
         </div>
     );
 }

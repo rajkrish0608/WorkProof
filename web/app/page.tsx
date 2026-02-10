@@ -8,6 +8,9 @@ import { useRef, useState, useEffect } from "react";
 import { AuroraBackground } from "@/components/ui/aurora-background";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { BlueprintIntro } from "@/components/intro-starter";
+import { FeaturesSection } from "@/components/landing/features-section";
+import { HowItWorks } from "@/components/landing/how-it-works";
+import { StatsSection } from "@/components/landing/stats-section";
 
 // --- 3D MONOLITH COMPONENT ---
 function Monolith({ scrollYProgress, phase }: { scrollYProgress: MotionValue<number>, phase?: 1 | 2 | 3 }) {
