@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { motion, useScroll, useTransform, useSpring, useMotionTemplate, AnimatePresence } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, useMotionTemplate, AnimatePresence, MotionValue } from "framer-motion";
 import { ArrowRight, CheckCircle2, ShieldCheck, Users, Lock, Fingerprint, Database } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import { AuroraBackground } from "@/components/ui/aurora-background";
@@ -10,7 +10,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { BlueprintIntro } from "@/components/intro-starter";
 
 // --- 3D MONOLITH COMPONENT ---
-function Monolith({ scrollYProgress }: { scrollYProgress: any }) {
+function Monolith({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
   // Smooth out the scroll progress
   const smoothProgress = useSpring(scrollYProgress, { mass: 0.1, stiffness: 100, damping: 20 });
 
@@ -99,8 +99,10 @@ export default function Home() {
             <header className="fixed top-0 w-full z-50 border-b border-zinc-200/50 dark:border-zinc-800/50 bg-white/50 dark:bg-zinc-950/50 backdrop-blur-md">
               <div className="container mx-auto flex h-20 items-center justify-between px-6 lg:px-12">
                 <div className="flex items-center gap-3">
-                  <div className="h-8 w-8 rounded-lg bg-indigo-600 shadow-lg shadow-indigo-500/20" />
-                  <span className="text-xl font-bold tracking-tighter text-zinc-900 dark:text-zinc-50">WorkProof</span>
+                  <Link href="/" className="flex items-center gap-3 transition-opacity hover:opacity-80">
+                    <div className="h-8 w-8 rounded-lg bg-indigo-600 shadow-lg shadow-indigo-500/20" />
+                    <span className="text-xl font-bold tracking-tighter text-zinc-900 dark:text-zinc-50">WorkProof</span>
+                  </Link>
                 </div>
                 <div className="flex items-center gap-6">
                   <ThemeToggle />
@@ -216,8 +218,8 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
-                  <div className="hidden lg:block">
-                    {/* Monolith Placeholder */}
+                  <div className="hidden lg:flex items-center justify-center">
+                    <Monolith scrollYProgress={scrollYProgress} />
                   </div>
                 </div>
               </section>
