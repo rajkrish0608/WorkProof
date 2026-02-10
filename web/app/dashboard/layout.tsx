@@ -52,20 +52,19 @@ export default function DashboardLayout({
                             key={item.href}
                             href={item.href}
                             onClick={() => setIsMobileOpen(false)}
-                            className="relative group flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-md transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-zinc-600"
+                            className={`relative group flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${isActive ? "text-white" : "text-zinc-400 hover:text-zinc-50 hover:bg-zinc-900"}`}
                         >
                             {isActive && (
                                 <motion.div
                                     layoutId="activeNav"
-                                    className="absolute inset-0 bg-zinc-800 rounded-md"
-                                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                    className="absolute inset-0 bg-zinc-800 rounded-md border-l-2 border-indigo-500"
+                                    transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
                                 />
                             )}
-                            <item.icon className={`h-4 w-4 z-10 transition-colors ${isActive ? "text-white" : "text-zinc-400 group-hover:text-zinc-50"}`} />
-                            <span className={`z-10 transition-colors ${isActive ? "text-white" : "text-zinc-400 group-hover:text-zinc-50"}`}>
+                            <item.icon className={`h-4 w-4 z-10 ${isActive ? "text-indigo-400" : "text-zinc-500 group-hover:text-zinc-400"}`} />
+                            <span className="z-10">
                                 {item.label}
                             </span>
-                            {isActive && <ChevronRight className="ml-auto h-3 w-3 text-zinc-500 z-10" />}
                         </Link>
                     );
                 })}

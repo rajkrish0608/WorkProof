@@ -45,85 +45,91 @@ export default function DashboardPage() {
     };
 
     return (
-        <div className="space-y-8">
-            <div className="flex items-center justify-between">
+        <div className="space-y-8 max-w-6xl">
+            <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-6">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">Dashboard</h1>
-                    <p className="text-zinc-500 dark:text-zinc-400 mt-1">Overview of your workforce and payments.</p>
+                    <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">Overview</h1>
+                    <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Workforce and financial summary.</p>
                 </div>
-                <div className="h-10 w-10 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center border border-zinc-200 dark:border-zinc-700">
-                    <span className="font-bold text-zinc-700 dark:text-zinc-300">{user?.name?.charAt(0)}</span>
+                <div className="flex items-center gap-3">
+                    <div className="text-right hidden sm:block">
+                        <div className="text-sm font-medium text-zinc-900 dark:text-zinc-50">{user?.name}</div>
+                        <div className="text-xs text-zinc-500">{user?.role}</div>
+                    </div>
+                    <div className="h-9 w-9 rounded bg-indigo-600 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+                        {user?.name?.charAt(0)}
+                    </div>
                 </div>
             </div>
 
             <motion.div
-                variants={container}
-                initial="hidden"
-                animate="show"
-                className="grid gap-4 md:grid-cols-2 lg:grid-cols-3"
+                initial={{ opacity: 0, y: 4 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
             >
-                <motion.div variants={item}>
-                    <Card className="border-l-4 border-l-blue-500 shadow-sm hover:shadow-md transition-shadow">
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Total Workers</CardTitle>
-                            <Users className="h-4 w-4 text-blue-500" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">{loading ? "..." : stats.totalWorkers}</div>
-                            <p className="text-xs text-zinc-500 mt-1">Registered contractors</p>
-                        </CardContent>
-                    </Card>
-                </motion.div>
+                <Card className="p-6 flex flex-col justify-between h-full bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800">
+                    <div className="flex items-start justify-between mb-4">
+                        <div>
+                            <p className="text-xs font-medium text-zinc-500 uppercase tracking-wider">Total Workers</p>
+                            <h3 className="text-3xl font-semibold text-zinc-900 dark:text-zinc-50 mt-2">{loading ? "—" : stats.totalWorkers}</h3>
+                        </div>
+                        <div className="p-2 rounded bg-zinc-50 dark:bg-zinc-800 text-zinc-400">
+                            <Users className="h-4 w-4" />
+                        </div>
+                    </div>
+                    <div className="text-xs text-zinc-500">Registered contractors</div>
+                </Card>
 
-                <motion.div variants={item}>
-                    <Card className="border-l-4 border-l-emerald-500 shadow-sm hover:shadow-md transition-shadow">
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Active Today</CardTitle>
-                            <UserCheck className="h-4 w-4 text-emerald-500" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">{loading ? "..." : stats.activeToday}</div>
-                            <p className="text-xs text-zinc-500 mt-1">
-                                {stats.totalWorkers > 0
-                                    ? `${Math.round((stats.activeToday / stats.totalWorkers) * 100)}% attendance rate`
-                                    : "No workers yet"}
-                            </p>
-                        </CardContent>
-                    </Card>
-                </motion.div>
+                <Card className="p-6 flex flex-col justify-between h-full bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800">
+                    <div className="flex items-start justify-between mb-4">
+                        <div>
+                            <p className="text-xs font-medium text-zinc-500 uppercase tracking-wider">Active Today</p>
+                            <h3 className="text-3xl font-semibold text-zinc-900 dark:text-zinc-50 mt-2">{loading ? "—" : stats.activeToday}</h3>
+                        </div>
+                        <div className="p-2 rounded bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600">
+                            <UserCheck className="h-4 w-4" />
+                        </div>
+                    </div>
+                    <div className="text-xs text-zinc-500">
+                        {stats.totalWorkers > 0
+                            ? <span className="text-indigo-600 font-medium">{Math.round((stats.activeToday / stats.totalWorkers) * 100)}% attendance</span>
+                            : "No activity yet"}
+                    </div>
+                </Card>
 
-                <motion.div variants={item}>
-                    <Card className="border-l-4 border-l-amber-500 shadow-sm hover:shadow-md transition-shadow">
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium text-zinc-500 dark:text-zinc-400">Paid This Month</CardTitle>
-                            <IndianRupee className="h-4 w-4 text-amber-500" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">
-                                {loading ? "..." : `₹${stats.totalPaidMonth.toLocaleString()}`}
-                            </div>
-                            <p className="text-xs text-zinc-500 mt-1">Total disbursed</p>
-                        </CardContent>
-                    </Card>
-                </motion.div>
+                <Card className="p-6 flex flex-col justify-between h-full bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800">
+                    <div className="flex items-start justify-between mb-4">
+                        <div>
+                            <p className="text-xs font-medium text-zinc-500 uppercase tracking-wider">Disbursed (Month)</p>
+                            <h3 className="text-3xl font-semibold text-zinc-900 dark:text-zinc-50 mt-2">
+                                {loading ? "—" : `₹${stats.totalPaidMonth.toLocaleString()}`}
+                            </h3>
+                        </div>
+                        <div className="p-2 rounded bg-zinc-50 dark:bg-zinc-800 text-zinc-400">
+                            <IndianRupee className="h-4 w-4" />
+                        </div>
+                    </div>
+                    <div className="text-xs text-zinc-500">Processed payments</div>
+                </Card>
             </motion.div>
 
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="grid gap-6 md:grid-cols-2 lg:grid-cols-7"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                className="grid gap-6 md:grid-cols-2"
             >
-                <Card className="col-span-4 h-[350px] flex flex-col items-center justify-center text-zinc-400 bg-zinc-50/50 dark:bg-zinc-900/50 border-dashed border-2 px-6 text-center">
-                    <BarChart3 className="h-12 w-12 mb-4 opacity-50" />
-                    <h3 className="text-lg font-medium text-zinc-900 dark:text-zinc-50">Attendance Analytics</h3>
-                    <p className="text-sm max-w-xs mx-auto mt-2">Detailed attendance trends and insights will appear here when more data is collected.</p>
-                </Card>
-                <Card className="col-span-3 h-[350px] flex flex-col items-center justify-center text-zinc-400 bg-zinc-50/50 dark:bg-zinc-900/50 border-dashed border-2 px-6 text-center">
-                    <Receipt className="h-12 w-12 mb-4 opacity-50" />
-                    <h3 className="text-lg font-medium text-zinc-900 dark:text-zinc-50">Recent Activity</h3>
-                    <p className="text-sm max-w-xs mx-auto mt-2">Your latest payments and worker additions will be listed here.</p>
-                </Card>
+                <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/30 p-8 flex flex-col items-center justify-center text-center h-[300px]">
+                    <BarChart3 className="h-10 w-10 text-zinc-300 mb-4" />
+                    <h3 className="text-sm font-medium text-zinc-900 dark:text-zinc-50">Attendance Analytics</h3>
+                    <p className="text-xs text-zinc-400 max-w-[200px] mt-1">Collecting data for detailed insights.</p>
+                </div>
+                <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/30 p-8 flex flex-col items-center justify-center text-center h-[300px]">
+                    <Receipt className="h-10 w-10 text-zinc-300 mb-4" />
+                    <h3 className="text-sm font-medium text-zinc-900 dark:text-zinc-50">Recent Activity</h3>
+                    <p className="text-xs text-zinc-400 max-w-[200px] mt-1">Transactions and logs will appear here.</p>
+                </div>
             </motion.div>
         </div>
     );
