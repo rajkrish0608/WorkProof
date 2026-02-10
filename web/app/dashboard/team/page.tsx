@@ -19,9 +19,15 @@ import {
     DialogTrigger,
     DialogFooter,
 } from "@/components/ui/dialog";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus, UserCog, ShieldAlert } from "lucide-react";
+import { Plus, UserCog, ShieldAlert, MoreVertical, Pencil, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 
@@ -40,6 +46,9 @@ export default function TeamPage() {
     const [staff, setStaff] = useState<Staff[]>([]);
     const [loading, setLoading] = useState(true);
     const [isAddOpen, setIsAddOpen] = useState(false);
+    const [isEditOpen, setIsEditOpen] = useState(false);
+    const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+    const [selectedStaff, setSelectedStaff] = useState<Staff | null>(null);
 
     // Form State
     const [formData, setFormData] = useState({ name: "", email: "", password: "", phone: "" });
@@ -93,6 +102,66 @@ export default function TeamPage() {
             setFormData({ name: "", email: "", password: "", phone: "" });
         } catch (err: any) {
             setError(err.message);
+        }
+    };
+
+    const handleEditStaff = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!selectedStaff) return;
+        setError("");
+
+        try {
+            const res = await fetch(`/api/staff/${selectedStaff.id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    name: formData.name,
+                    email: formData.email,
+                    phone: formData.phone,
+                    ...(formData.password ? { password: formData.password } : {})
+                }),
+            });
+
+            if (!res.ok) {
+                const data = await res.json();
+                throw new Error(data.error || "Failed to update staff");
+            }
+
+            await fetchStaff();
+            setIsEditOpen(false);
+            setFormData({ name: "", email: "", password: "", phone: "" });
+            setSelectedStaff(null);
+        } catch (err: any) {
+            setError(err.message);
+        }
+    };
+
+    const handleDeleteStaff = async () => {
+        if (!selectedStaff) return;
+        setError("");
+
+        try {
+            const res = await fetch(`/api/staff/${selectedStaff.id}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (!res.ok) {
+                const data = await res.json();
+                throw new Error(data.error || "Failed to delete staff");
+            }
+
+            await fetchStaff();
+            setIsDeleteOpen(false);
+            setSelectedStaff(null);
+        } catch (err: any) {
+            setError(err.message);
+            alert(err.message);
         }
     };
 
@@ -172,6 +241,72 @@ export default function TeamPage() {
                 </Dialog>
             </div>
 
+            {/* Edit Staff Dialog */}
+            <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Edit Staff Member</DialogTitle>
+                    </DialogHeader>
+                    <form onSubmit={handleEditStaff} className="space-y-4">
+                        {error && <div className="text-red-500 text-sm">{error}</div>}
+                        <div className="space-y-2">
+                            <Label htmlFor="edit-name">Full Name</Label>
+                            <Input
+                                id="edit-name"
+                                value={formData.name}
+                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                required
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="edit-email">Email Address</Label>
+                            <Input
+                                id="edit-email"
+                                type="email"
+                                value={formData.email}
+                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                required
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="edit-phone">Phone (Optional)</Label>
+                            <Input
+                                id="edit-phone"
+                                value={formData.phone}
+                                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="edit-password">New Password (leave blank to keep current)</Label>
+                            <Input
+                                id="edit-password"
+                                type="password"
+                                value={formData.password}
+                                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                minLength={6}
+                            />
+                        </div>
+                        <DialogFooter>
+                            <Button type="submit">Save Changes</Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
+
+            {/* Delete Confirmation Dialog */}
+            <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Delete Staff Member</DialogTitle>
+                        <p className="text-sm text-muted-foreground">Are you sure you want to delete <strong>{selectedStaff?.name}</strong>? This action cannot be undone.</p>
+                    </DialogHeader>
+                    <DialogFooter className="gap-2 sm:gap-0">
+                        <Button variant="outline" onClick={() => setIsDeleteOpen(false)}>Cancel</Button>
+                        <Button variant="destructive" onClick={handleDeleteStaff}>Delete</Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
@@ -181,18 +316,19 @@ export default function TeamPage() {
                             <TableHead>Phone</TableHead>
                             <TableHead>Role</TableHead>
                             <TableHead>Joined</TableHead>
+                            <TableHead className="w-[80px]">Actions</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {loading ? (
                             <TableRow>
-                                <TableCell colSpan={5} className="text-center h-24">
+                                <TableCell colSpan={6} className="text-center h-24">
                                     Loading...
                                 </TableCell>
                             </TableRow>
                         ) : staff.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={5} className="text-center h-24 text-muted-foreground">
+                                <TableCell colSpan={6} className="text-center h-24 text-muted-foreground">
                                     No staff members found.
                                 </TableCell>
                             </TableRow>
@@ -213,6 +349,40 @@ export default function TeamPage() {
                                         </span>
                                     </TableCell>
                                     <TableCell>{format(new Date(member.createdAt), "PPP")}</TableCell>
+                                    <TableCell>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button variant="ghost" className="h-8 w-8 p-0">
+                                                    <MoreVertical className="h-4 w-4" />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                <DropdownMenuItem onClick={() => {
+                                                    setSelectedStaff(member);
+                                                    setFormData({
+                                                        name: member.name,
+                                                        email: member.email,
+                                                        phone: member.phone || "",
+                                                        password: ""
+                                                    });
+                                                    setIsEditOpen(true);
+                                                }}>
+                                                    <Pencil className="mr-2 h-4 w-4" />
+                                                    Edit
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem
+                                                    className="text-red-600 focus:text-red-600"
+                                                    onClick={() => {
+                                                        setSelectedStaff(member);
+                                                        setIsDeleteOpen(true);
+                                                    }}
+                                                >
+                                                    <Trash2 className="mr-2 h-4 w-4" />
+                                                    Delete
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </TableCell>
                                 </TableRow>
                             ))
                         )}
@@ -222,3 +392,4 @@ export default function TeamPage() {
         </div>
     );
 }
+
