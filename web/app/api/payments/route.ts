@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { getUserFromRequest } from '@/lib/auth'
 import { z } from 'zod'
+import { sendSMS } from '@/lib/sms'
 
 const paymentSchema = z.object({
     workerId: z.string(),
@@ -69,7 +70,6 @@ export async function POST(request: Request) {
             }
         })
 
-        import { sendSMS } from '@/lib/sms'
 
         // Trigger SMS Receipt
         await sendSMS(

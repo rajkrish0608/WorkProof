@@ -36,6 +36,7 @@ export async function POST(request: Request) {
 
         const token = generateToken({
             id: user.id,
+            name: user.name,
             email: user.email,
             role: user.role,
             orgId: user.managerId || user.id

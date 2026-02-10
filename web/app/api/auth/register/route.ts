@@ -40,7 +40,13 @@ export async function POST(request: Request) {
             }
         })
 
-        const token = generateToken({ id: user.id, email: user.email })
+        const token = generateToken({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            orgId: user.id // For new contractors, they are the org owner
+        })
 
         return NextResponse.json({ token, user: { id: user.id, name: user.name, email: user.email } }, { status: 201 })
 

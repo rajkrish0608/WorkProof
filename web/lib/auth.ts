@@ -30,5 +30,5 @@ export const getUserFromRequest = (request: Request) => {
         return null
     }
     const token = authHeader.split(' ')[1]
-    return verifyToken(token) as { id: string, email: string, role: string, orgId: string } | null
+    return verifyToken(token) as { id: string, name: string, email: string, role: string, orgId: string } | null
 }
