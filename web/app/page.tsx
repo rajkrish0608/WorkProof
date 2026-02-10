@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion, useScroll, useTransform, AnimatePresence, useMotionValue } from "framer-motion";
 import { ArrowRight, CheckCircle2, ShieldCheck, Users } from "lucide-react";
 import { useRef, useState } from "react";
 import { BlueprintIntro } from "@/components/intro-starter";

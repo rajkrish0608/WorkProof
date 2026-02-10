@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
+import { SmoothScroll } from "@/components/ui/smooth-scroll";
+import { Atmosphere } from "@/components/ui/atmosphere";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-serif" });
@@ -19,9 +21,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${playfair.variable} font-sans antialiased`}>
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        <SmoothScroll>
+          <Atmosphere />
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </SmoothScroll>
       </body>
     </html>
   );
