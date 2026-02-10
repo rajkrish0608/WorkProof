@@ -79,5 +79,19 @@ module.exports = {
             }
         },
     },
-    plugins: [], // require("tw-animate-css")
+    plugins: [
+        function ({ addUtilities }) {
+            addUtilities({
+                '.perspective-1000': {
+                    'perspective': '1000px',
+                },
+                '.perspective-2000': {
+                    'perspective': '2000px',
+                },
+                '.transform-style-3d': {
+                    'transform-style': 'preserve-3d',
+                },
+            })
+        }
+    ],
 };
