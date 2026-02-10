@@ -18,15 +18,20 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 
+import { Atmosphere } from "@/components/ui/atmosphere";
+import { ThemeToggle } from "@/components/theme-toggle";
+
 export default function DashboardLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
+    // ... existing hooks ...
     const pathname = usePathname();
     const { user, logout } = useAuth();
     const [isMobileOpen, setIsMobileOpen] = useState(false);
 
+    // ... existing navItems ...
     const navItems = [
         { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
         { href: "/dashboard/workers", label: "Workers", icon: Users },
@@ -40,6 +45,7 @@ export default function DashboardLayout({
 
     const sidebarContent = (
         <div className="flex flex-col h-full bg-zinc-50/50 backdrop-blur-xl border-r border-zinc-200 dark:bg-zinc-950/80 dark:border-zinc-800">
+            {/* ... sidebar content ... */}
             <div className="flex h-20 items-center px-6 border-b border-zinc-200 dark:border-zinc-800">
                 <div className="h-6 w-6 rounded bg-indigo-600 shadow-[0_0_15px_rgba(79,70,229,0.3)] mr-3" />
                 <span className="font-serif font-bold text-xl tracking-tight text-zinc-900 dark:text-zinc-50">WorkProof</span>
@@ -87,7 +93,10 @@ export default function DashboardLayout({
     );
 
     return (
-        <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 flex font-sans selection:bg-indigo-100 selection:text-indigo-900">
+        <div className="min-h-screen bg-white dark:bg-black flex font-sans selection:bg-indigo-100 selection:text-indigo-900 relative overflow-hidden">
+            {/* ATMOSPHERE INJECTION */}
+            <Atmosphere />
+
             {/* Desktop Sidebar */}
             <aside className="hidden md:block w-72 sticky top-0 h-screen overflow-hidden z-30">
                 {sidebarContent}
@@ -122,6 +131,7 @@ export default function DashboardLayout({
                     </div>
 
                     <div className="hidden md:flex items-center gap-4">
+                        <ThemeToggle />
                         {/* Status Indicator - Simplified */}
                         <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/5 border border-emerald-500/10">
                             <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -131,13 +141,13 @@ export default function DashboardLayout({
                 </header>
 
                 <main className="flex-1 p-8 max-w-7xl mx-auto w-full">
-                    <AnimatePresence mode="wait">
+                    <AnimatePresence mode="popLayout">
                         <motion.div
                             key={pathname}
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
-                            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                            transition={{ duration: 0.15, ease: "easeOut" }}
                             className="h-full"
                         >
                             {children}

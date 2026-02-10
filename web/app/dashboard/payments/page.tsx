@@ -147,9 +147,15 @@ export default function PaymentsPage() {
                 <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
                     <DialogTrigger asChild>
                         <Button className="rounded-md bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm font-medium">
-                            <Plus size={16} className="mr-2" /> Record Payment
+                            <Plus size={16} className="mr-2" /> Record Manual Payment
                         </Button>
                     </DialogTrigger>
+
+                    {/* PAY NOW BUTTON (INTEGRATION POINT) */}
+                    <Button variant="outline" className="rounded-md border-indigo-200 text-indigo-700 hover:bg-indigo-50" onClick={() => alert("Payment Gateway (Razorpay/Stripe) Integration Point")}>
+                        <IndianRupee size={16} className="mr-2" /> Pay Online
+                    </Button>
+
                     <DialogContent className="rounded-lg border-zinc-200 dark:border-zinc-800">
                         <DialogHeader>
                             <DialogTitle className="font-serif">Record Payment</DialogTitle>

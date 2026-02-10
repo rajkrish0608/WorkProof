@@ -2,8 +2,8 @@
 
 @layer base {
   :root {
-    /* Zinc-50 base */
-    --background: 0 0% 98%;
+    /* Pure White base */
+    --background: 0 0% 100%;
     /* Zinc-900 text */
     --foreground: 240 10% 3.9%;
 

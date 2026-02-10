@@ -69,7 +69,13 @@ export async function POST(request: Request) {
             }
         })
 
-        // TODO: Trigger SMS Receipt (Puthu Phase 2)
+        import { sendSMS } from '@/lib/sms'
+
+        // Trigger SMS Receipt
+        await sendSMS(
+            worker.phone,
+            `WorkProof Alert: Payment of ₹${amount} received from ${user.name || 'Contractor'}. Ref: ${payment.id.slice(0, 8)}`
+        );
 
         return NextResponse.json(payment, { status: 201 })
 
