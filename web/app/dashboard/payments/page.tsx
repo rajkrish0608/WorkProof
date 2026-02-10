@@ -28,8 +28,9 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Plus, Download } from "lucide-react";
+import { Plus, Download, Receipt, IndianRupee } from "lucide-react";
 import { format } from "date-fns";
+import { motion } from "framer-motion";
 
 interface Payment {
     id: string;
@@ -119,30 +120,50 @@ export default function PaymentsPage() {
         }
     };
 
+    const container = {
+        hidden: { opacity: 0 },
+        show: { opacity: 1, transition: { staggerChildren: 0.1 } }
+    };
+
+    const item = {
+        hidden: { opacity: 0, y: 10 },
+        show: { opacity: 1, y: 0 }
+    };
+
     return (
-        <div className="space-y-6">
-            <div className="flex items-center justify-between">
-                <h1 className="text-3xl font-bold tracking-tight">Payments</h1>
+        <motion.div
+            className="space-y-8"
+            variants={container}
+            initial="hidden"
+            animate="show"
+        >
+            <motion.div variants={item} className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 border-b border-zinc-200 dark:border-zinc-800 pb-6">
+                <div>
+                    <h1 className="text-3xl font-serif font-bold tracking-tight text-zinc-900 dark:text-zinc-50">Payments</h1>
+                    <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-2 max-w-lg font-light">
+                        Track financial transactions and worker payments.
+                    </p>
+                </div>
                 <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
                     <DialogTrigger asChild>
-                        <Button className="gap-2">
-                            <Plus size={16} /> Record Payment
+                        <Button className="rounded-md bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm font-medium">
+                            <Plus size={16} className="mr-2" /> Record Payment
                         </Button>
                     </DialogTrigger>
-                    <DialogContent>
+                    <DialogContent className="rounded-lg border-zinc-200 dark:border-zinc-800">
                         <DialogHeader>
-                            <DialogTitle>Record New Payment</DialogTitle>
+                            <DialogTitle className="font-serif">Record Payment</DialogTitle>
                         </DialogHeader>
                         <form onSubmit={handleRecordPayment} className="space-y-4">
-                            {error && <div className="text-red-500 text-sm">{error}</div>}
+                            {error && <div className="text-red-500 text-sm bg-red-50 p-2 rounded">{error}</div>}
                             <div className="space-y-2">
                                 <Label htmlFor="worker">Worker</Label>
                                 <Select
                                     value={formData.workerId}
                                     onValueChange={(val) => setFormData({ ...formData, workerId: val })}
                                 >
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select a worker" />
+                                    <SelectTrigger className="h-10 rounded-md border-zinc-200 focus:ring-zinc-400">
+                                        <SelectValue placeholder="Select Worker" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {workers.map((worker) => (
@@ -161,59 +182,85 @@ export default function PaymentsPage() {
                                     value={formData.amount}
                                     onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                                     required
+                                    className="h-10 rounded-md border-zinc-200 focus-visible:ring-indigo-500"
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="notes">Notes (Optional)</Label>
+                                <Label htmlFor="notes">Notes</Label>
                                 <Input
                                     id="notes"
                                     value={formData.notes}
                                     onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                                    className="h-10 rounded-md border-zinc-200 focus-visible:ring-indigo-500"
                                 />
                             </div>
                             <DialogFooter>
-                                <Button type="submit">Save Payment</Button>
+                                <Button type="submit" className="w-full sm:w-auto rounded-md bg-zinc-900 text-white hover:bg-zinc-800">Save Transaction</Button>
                             </DialogFooter>
                         </form>
                     </DialogContent>
                 </Dialog>
-            </div>
+            </motion.div>
 
-            <div className="rounded-md border">
+            <motion.div variants={item} className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden shadow-sm">
                 <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Date</TableHead>
-                            <TableHead>Worker</TableHead>
-                            <TableHead>Amount</TableHead>
-                            <TableHead>Notes</TableHead>
+                    <TableHeader className="bg-zinc-50/50 dark:bg-zinc-900/50">
+                        <TableRow className="border-b border-zinc-200 dark:border-zinc-800 hover:bg-transparent">
+                            <TableHead className="h-10 font-medium text-zinc-500">Date</TableHead>
+                            <TableHead className="h-10 font-medium text-zinc-500">Worker</TableHead>
+                            <TableHead className="h-10 font-medium text-zinc-500">Amount</TableHead>
+                            <TableHead className="h-10 font-medium text-zinc-500">Notes</TableHead>
+                            <TableHead className="h-10 font-medium text-zinc-500 text-right">Receipt</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {loading ? (
                             <TableRow>
-                                <TableCell colSpan={4} className="text-center h-24">
-                                    Loading...
+                                <TableCell colSpan={5} className="text-center h-32 text-zinc-500">
+                                    Loading payments...
                                 </TableCell>
                             </TableRow>
                         ) : payments.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={4} className="text-center h-24 text-muted-foreground">
-                                    No payments recorded yet.
+                                <TableCell colSpan={5} className="text-center h-48">
+                                    <div className="flex flex-col items-center justify-center text-zinc-500">
+                                        <div className="h-12 w-12 rounded bg-zinc-100 flex items-center justify-center mb-3">
+                                            <Receipt className="h-5 w-5 opacity-40" />
+                                        </div>
+                                        <p className="text-base font-medium text-zinc-900">No payments found</p>
+                                        <p className="text-sm text-zinc-500 mt-1">Record a payment to see it here.</p>
+                                    </div>
                                 </TableCell>
                             </TableRow>
                         ) : (
                             payments.map((payment) => (
-                                <TableRow key={payment.id}>
-                                    <TableCell>{format(new Date(payment.createdAt), "PPP")}</TableCell>
-                                    <TableCell className="font-medium">{payment.worker.name}</TableCell>
-                                    <TableCell className="text-green-600 font-bold">₹{payment.amount}</TableCell>
-                                    <TableCell>{payment.notes || "-"}</TableCell>
+                                <TableRow key={payment.id} className="group border-b border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50/50 transition-colors">
+                                    <TableCell className="text-sm text-zinc-500">
+                                        {format(new Date(payment.createdAt), "dd MMM yyyy, HH:mm")}
+                                    </TableCell>
+                                    <TableCell className="font-medium">
+                                        <div className="flex items-center gap-2">
+                                            <div className="h-6 w-6 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-[10px] font-bold text-zinc-500 border border-zinc-200 dark:border-zinc-700">
+                                                {payment.worker.name.charAt(0)}
+                                            </div>
+                                            {payment.worker.name}
+                                        </div>
+                                    </TableCell>
                                     <TableCell>
+                                        <div className="flex items-center gap-1 font-medium text-emerald-600">
+                                            <span className="text-xs">₹</span>
+                                            {payment.amount}
+                                        </div>
+                                    </TableCell>
+                                    <TableCell className="text-sm text-zinc-500 max-w-[200px] truncate">
+                                        {payment.notes || <span className="opacity-30 italic">No notes</span>}
+                                    </TableCell>
+                                    <TableCell className="text-right">
                                         <Button
                                             variant="ghost"
                                             size="icon"
                                             title="Download Receipt"
+                                            className="h-8 w-8 text-zinc-400 hover:text-zinc-900 rounded-md"
                                             onClick={async () => {
                                                 try {
                                                     const res = await fetch(`/api/reports/${payment.id}`, {
@@ -235,7 +282,7 @@ export default function PaymentsPage() {
                                                 }
                                             }}
                                         >
-                                            <Download className="h-4 w-4 text-zinc-500 hover:text-zinc-900" />
+                                            <Download className="h-3.5 w-3.5" />
                                         </Button>
                                     </TableCell>
                                 </TableRow>
@@ -243,7 +290,7 @@ export default function PaymentsPage() {
                         )}
                     </TableBody>
                 </Table>
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
     );
 }
