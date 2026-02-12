@@ -32,10 +32,10 @@ function Monolith({ scrollYProgress, phase }: { scrollYProgress: MotionValue<num
   const opacity3 = useTransform(smoothProgress, [0.75, 1], [0, 1]);
 
   return (
-    <div className="h-[600px] w-full flex items-center justify-center perspective-[1000px]">
+    <div className="h-[450px] lg:h-[600px] w-full flex items-center justify-center perspective-[1000px]">
       <motion.div
         style={{ rotateY, rotateX, scale, y }}
-        className="relative w-[300px] h-[500px] rounded-3xl bg-white/10 dark:bg-black/40 backdrop-blur-2xl border border-white/20 dark:border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.1)] dark:shadow-[0_0_100px_rgba(79,70,229,0.1)] overflow-hidden"
+        className="relative w-[260px] h-[380px] lg:w-[300px] lg:h-[500px] rounded-3xl bg-white/10 dark:bg-black/40 backdrop-blur-2xl border border-white/20 dark:border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.1)] dark:shadow-[0_0_100px_rgba(79,70,229,0.1)] overflow-hidden"
       >
         {/* Inner Glow */}
         <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/10 via-transparent to-emerald-500/10 pointer-events-none" />
@@ -135,14 +135,14 @@ export default function Home() {
 
             <main className="relative z-10 w-full">
               {/* SECTION 1: HERO (SPLIT) */}
-              <section className="min-h-screen flex items-center justify-center px-6 lg:px-12 pt-20">
+              <section className="min-h-screen lg:h-screen flex items-center justify-center px-6 lg:px-12 pt-28 pb-12 lg:pt-20 lg:pb-0">
                 <div className="container mx-auto grid lg:grid-cols-2 gap-12 items-center">
-                  <div className="space-y-8 order-2 lg:order-1">
+                  <div className="space-y-6 lg:space-y-8 order-2 lg:order-1 text-center lg:text-left">
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.8 }}
-                      className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 text-xs font-mono uppercase tracking-widest"
+                      className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 text-xs font-mono uppercase tracking-widest mx-auto lg:mx-0"
                     >
                       <span className="relative flex h-2 w-2">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
@@ -154,7 +154,7 @@ export default function Home() {
                       initial={{ opacity: 0, y: 30 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.8, delay: 0.1 }}
-                      className="text-6xl md:text-8xl font-serif font-bold text-zinc-900 dark:text-zinc-50 leading-[0.9] tracking-tight"
+                      className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold text-zinc-900 dark:text-zinc-50 leading-[0.9] tracking-tight"
                     >
                       Operational <br /> Truth.
                     </motion.h1>
@@ -162,7 +162,7 @@ export default function Home() {
                       initial={{ opacity: 0, y: 30 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.8, delay: 0.2 }}
-                      className="text-xl text-zinc-600 dark:text-zinc-400 max-w-lg leading-relaxed"
+                      className="text-lg md:text-xl text-zinc-600 dark:text-zinc-400 max-w-lg leading-relaxed mx-auto lg:mx-0"
                     >
                       The new standard for modern workforce management. Verified attendance, instant payments, and an immutable ledger that never forgets.
                     </motion.p>
@@ -170,13 +170,14 @@ export default function Home() {
                       initial={{ opacity: 0, y: 30 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.8, delay: 0.3 }}
+                      className="flex justify-center lg:justify-start"
                     >
                       <Button size="lg" className="h-14 px-8 rounded-full text-lg bg-indigo-600 hover:bg-indigo-700 text-white shadow-xl shadow-indigo-500/20" asChild>
                         <Link href="/register">Start Now <ArrowRight className="ml-2 h-5 w-5" /></Link>
                       </Button>
                     </motion.div>
                   </div>
-                  <div className="hidden lg:flex items-center justify-center order-1 lg:order-2 h-[80vh] sticky top-20">
+                  <div className="flex items-center justify-center order-1 lg:order-2 h-[400px] lg:h-[80vh] sticky top-20">
                     <Monolith scrollYProgress={scrollYProgress} />
                   </div>
                 </div>
@@ -189,16 +190,16 @@ export default function Home() {
               <StatsSection />
 
               {/* SECTION 2: IDENTITY */}
-              <section className="min-h-screen flex items-center px-6 lg:px-12">
+              <section className="py-24 lg:min-h-screen flex items-center px-6 lg:px-12">
                 <div className="container mx-auto grid lg:grid-cols-2 gap-12 items-center">
                   <div className="hidden lg:flex items-center justify-center">
                     <Monolith scrollYProgress={scrollYProgress} phase={1} />
                   </div>
-                  <div className="space-y-12 max-w-lg lg:ml-auto bg-white/50 dark:bg-black/20 backdrop-blur-md p-8 rounded-3xl border border-zinc-200/50 dark:border-white/10">
+                  <div className="space-y-8 lg:space-y-12 max-w-lg lg:ml-auto bg-white/50 dark:bg-black/20 backdrop-blur-md p-8 rounded-3xl border border-zinc-200/50 dark:border-white/10">
                     <div className="h-12 w-12 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center border border-zinc-200 dark:border-zinc-700">
                       <Fingerprint className="h-6 w-6 text-zinc-900 dark:text-zinc-100" />
                     </div>
-                    <h2 className="text-5xl font-serif font-bold text-zinc-900 dark:text-zinc-50">Instant Recognition</h2>
+                    <h2 className="text-4xl lg:text-5xl font-serif font-bold text-zinc-900 dark:text-zinc-50">Instant Recognition</h2>
                     <p className="text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed">
                       Onboard your team in seconds. Our system creates a secure digital identity for every worker, ensuring that the person on-site is the person you pay.
                     </p>
@@ -218,13 +219,13 @@ export default function Home() {
               <FeaturesSection />
 
               {/* SECTION 3: THE LEDGER */}
-              <section className="min-h-screen flex items-center px-6 lg:px-12">
+              <section className="py-24 lg:min-h-screen flex items-center px-6 lg:px-12">
                 <div className="container mx-auto grid lg:grid-cols-2 gap-12 items-center">
-                  <div className="space-y-12 max-w-lg bg-white/50 dark:bg-black/20 backdrop-blur-md p-8 rounded-3xl border border-zinc-200/50 dark:border-white/10">
+                  <div className="space-y-8 lg:space-y-12 max-w-lg bg-white/50 dark:bg-black/20 backdrop-blur-md p-8 rounded-3xl border border-zinc-200/50 dark:border-white/10">
                     <div className="h-12 w-12 rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center border border-zinc-200 dark:border-zinc-700">
                       <Database className="h-6 w-6 text-zinc-900 dark:text-zinc-100" />
                     </div>
-                    <h2 className="text-5xl font-serif font-bold text-zinc-900 dark:text-zinc-50">The Ledger</h2>
+                    <h2 className="text-4xl lg:text-5xl font-serif font-bold text-zinc-900 dark:text-zinc-50">The Ledger</h2>
                     <p className="text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed">
                       Every attendance mark and every payment is recorded on an immutable timeline. No revisions, no disputes—just pure operational truth.
                     </p>
